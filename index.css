@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 200 10% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 200 10% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 200 10% 12%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 152 72% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 10% 16%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 200 10% 16%;
+    --muted-foreground: 200 8% 70%;
+
+    --accent: 36 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 12% 90%;
+    --input: 210 12% 90%;
+    --ring: 152 72% 40%;
+
+    --radius: 0.75rem;
+
+    --gold: 36 100% 50%;
+    --gold-foreground: 36 100% 15%;
+    --hero-gradient: linear-gradient(135deg, hsl(152 72% 32%), hsl(152 72% 22%));
+    --card-shadow: 0 4px 24px -4px hsl(152 72% 30% / 0.08);
+    --card-shadow-hover: 0 8px 32px -4px hsl(152 72% 30% / 0.15);
+
+    --sidebar-background: 0 0% 99%;
+    --sidebar-foreground: 210 11% 15%;
+    --sidebar-primary: 152 72% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 150 10% 95%;
+    --sidebar-accent-foreground: 210 11% 15%;
+    --sidebar-border: 210 12% 91%;
+    --sidebar-ring: 152 72% 40%;
+  }
+
+  .dark {
+    --background: 200 10% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 200 10% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 200 10% 12%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 152 72% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 10% 16%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 200 10% 16%;
+    --muted-foreground: 200 8% 55%;
+
+    --accent: 36 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 10% 18%;
+    --input: 200 10% 18%;
+    --ring: 152 72% 45%;
+
+    --gold: 36 100% 50%;
+    --gold-foreground: 36 100% 90%;
+    --hero-gradient: linear-gradient(135deg, hsl(200 10% 12%), hsl(200 10% 6%));
+    --card-shadow: 0 4px 24px -4px hsl(0 0% 0% / 0.3);
+    --card-shadow-hover: 0 8px 32px -4px hsl(0 0% 0% / 0.5);
+
+    --sidebar-background: 200 10% 10%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 152 72% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 200 10% 14%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 200 10% 18%;
+    --sidebar-ring: 152 72% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--gold)));
+  }
+  .card-elevated {
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .card-elevated:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-2px);
+  }
+  .hero-bg {
+    background: var(--hero-gradient);
+  }
+  .gold-accent {
+    color: hsl(var(--gold));
+  }
+  .card-glossy {
+    position: relative;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.7);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .dark .card-glossy {
+    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  }
+  .card-glossy:hover {
+    transform: translateY(-3px);
+    border-color: hsl(var(--primary) / 0.5);
+    box-shadow: 0 12px 30px -4px hsl(var(--primary) / 0.16), inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+  }
+  .dark .card-glossy:hover {
+    box-shadow: 0 12px 30px -4px hsl(var(--primary) / 0.28), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+  }
+  .border-glossy {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+  }
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+  }
+  .dark .glass-panel {
+    background: rgba(11, 16, 38, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  }
+  .cosmic-canvas {
+    background: radial-gradient(circle at 50% 0%, #171b38 0%, #0b1026 50%, #080a12 100%);
+  }
+  .card-cosmic {
+    background: rgba(11, 16, 38, 0.65);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .card-cosmic:hover {
+    transform: translateY(-4px);
+    border-color: rgba(245, 199, 106, 0.5);
+    box-shadow: 0 20px 40px -10px rgba(108, 74, 230, 0.3), inset 0 1px 0 0 rgba(245, 199, 106, 0.4);
+  }
+  .text-gold-shimmer {
+    background: linear-gradient(135deg, #ffffff 0%, #f5c76a 45%, #ffd98a 70%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% auto;
+    animation: goldShimmer 6s ease-in-out infinite alternate;
+  }
+  .cosmic-ray-glow {
+    position: relative;
+  }
+  .cosmic-ray-glow::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, rgba(108, 74, 230, 0.4), rgba(72, 217, 245, 0.4), rgba(245, 199, 106, 0.4));
+    border-radius: inherit;
+    z-index: -1;
+    filter: blur(8px);
+    opacity: 0.7;
+  }
+}
+
+@keyframes goldShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes gentleBreathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes floatParticle {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-25px) rotate(180deg);
+    opacity: 0.2;
+  }
+}
+
