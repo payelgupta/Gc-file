@@ -1,0 +1,58 @@
+# Gyan Prakasha Path — Merged Security Patch & Verification Report
+
+তারিখ: ১০ নভেম্বর ২০২৬
+অডিটের ধরন: Local archive comparison, source merge, static review
+Production পরিবর্তন: করা হয়নি
+
+## সারাংশ
+Google AI Studio-এর দেওয়া রিপোর্টে ১৪টি সমস্যা (৩ Critical, ৪ High, ৪ Medium, ৩ Low) পাওয়া যায়। রিপোর্টের সবচেয়ে গুরুত্বপূর্ণ তথ্য ছিল: AI Studio-তে পরীক্ষা করা authoritative root source-এ আগের Security Patch ZIP-এর Migration ও `get-premium-pdf` Edge Function merge করা ছিল না।
+
+দুটি ZIP সরাসরি তুলনা করে বিষয়টি নিশ্চিত করা হয়েছে:
+- Original ZIP: 243 archive entries; ZIP integrity check PASS.
+- Security Patch ZIP: 206 archive entries; ZIP integrity check PASS.
+- Original source-এ `20261110000000_production_security_hardening.sql` ও `get-premium-pdf/index.ts` অনুপস্থিত ছিল।
+- Patch ZIP-এ দুটিই ছিল।
+
+Original Project-কে authoritative base ধরে Patch ZIP-এর পরিবর্তিত/নতুন ফাইলগুলো overlay করা হয়েছে। Original-এর বাকি ফাইল এবং `bun.lock` রাখা হয়েছে।
+
+## সংশোধিত/একত্রিত বিষয়
+1. Storage `uploads` INSERT/UPDATE/DELETE policy-তে Admin role check.
+2. Private `premium-pdfs` bucket এবং Admin-only object write/read policies.
+3. Paid PDF public URL-এর বদলে private object path সংরক্ষণ এবং signed URL endpoint.
+4. Premium PDF endpoint-এ user authentication, approved unlock request, paid-post state ও publication checks.
+5. Chatbot-এ client-provided `system` role গ্রহণ বন্ধ.
+6. Admin auth state resolve শেষ না হওয়া পর্যন্ত loading state ধরে রাখা.
+7. Unpublished parent post-এর chapter table read restriction.
+8. IP extraction-এ `X-Forwarded-For`-এর প্রথম caller-controlled hop-এর বদলে final hop ব্যবহার.
+9. Admin unlock counter-এর table name `pdf_unlock_requests` করা.
+10. PDF processing-এ OpenAI-compatible image endpoint-এ PDF পাঠানো বন্ধ; PDF path direct Gemini fallback-এর native `inline_data`-তে রূপান্তরিত হয়.
+11. Supabase placeholder config-এর পরিবর্তে explicit configuration validation.
+12. Paid PDF metadata stale হয়ে থাকা ঠেকাতে trigger hardening.
+
+## Test Status
+| পরীক্ষা | ফলাফল | নোট |
+|---|---|---|
+| ZIP integrity | PASS | দুই ZIP-ই অক্ষতভাবে extract হয়েছে |
+| Archive merge | PASS | Original base + patch overlay |
+| Original files retained | PASS | Original-এর ফাইল বাদ দেওয়া হয়নি; `bun.lock` রাখা হয়েছে |
+| Typecheck after merge | NOT RUN | Dependency installation timeout |
+| ESLint after merge | NOT RUN | Dependency installation timeout |
+| Vitest after merge | NOT RUN | Dependency installation timeout |
+| Vite build after merge | NOT RUN | Dependency installation timeout |
+| Supabase pgTAP/RLS | BLOCKED | Staging DB credentials/runner নেই |
+| Live AI generation | BLOCKED | Provider secrets ও external test environment নেই |
+
+Google AI Studio-এর পূর্বের PASS ফলাফলগুলি পুরোনো unpatched root-এর জন্য ছিল; সেগুলো merged ZIP-এর test pass হিসেবে গণ্য করা যাবে না।
+
+## অবশিষ্ট গুরুত্বপূর্ণ সতর্কতা
+- পুরোনো Paid PDF যেগুলো Public `uploads` bucket-এ আছে, সেগুলো স্বয়ংক্রিয়ভাবে Private হবে না। Staging-এ পুনরায় Private bucket-এ upload করতে হবে।
+- Chapter JSON-এ থাকা পুরোনো public PDF URLs আলাদাভাবে পর্যালোচনা করতে হবে, বিশেষ করে যদি সেগুলো paid content হয়।
+- Migration ও Edge Function কেবল Local Source-এ যোগ হয়েছে; deploy করা হয়নি।
+- `get-premium-pdf` function-এ signed URL ৩০ মিনিটের জন্য তৈরি হয়।
+- bKash/Nagad payment verification এখনও manual admin approval-নির্ভর; live gateway validation পরীক্ষা হয়নি।
+- AI free-tier endpoints-এর uptime/quota নিশ্চিত নয়।
+
+## চূড়ান্ত সিদ্ধান্ত
+**PRODUCTION READY: NO**
+
+পরবর্তী ধাপ: Google AI Studio বা লোকাল পরিবেশে merged ZIP থেকে `npm install`, `npm run typecheck`, `npm run lint`, `npm run test`, `npm run build` চালিয়ে প্রকৃত ফলাফল সংগ্রহ করতে হবে। তারপর আলাদা Staging Supabase Project-এ migration, Edge Function, Storage policies এবং signed URL access matrix পরীক্ষা করতে হবে। Production-এ কোনো পরিবর্তন এই কাজের অংশ ছিল না।
