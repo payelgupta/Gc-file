@@ -1,0 +1,19 @@
+{
+  "manifestVersion": "2026.11.10-v3",
+  "auditTimestamp": "2026-11-10T20:31:57.025Z",
+  "targetEnvironment": "staging",
+  "isAuditOnly": true,
+  "totalPaidPostsScanned": 0,
+  "legacyItemsDetected": 0,
+  "itemsMigrated": 0,
+  "itemsVerified": 0,
+  "itemsFailed": 0,
+  "sourceFilesRetained": true,
+  "notes": [
+    "1. Never delete source files from 'uploads' bucket automatically.",
+    "2. All files are verified with SHA-256 and %PDF- MIME magic headers.",
+    "3. Database updates use transactional RPC (migrate_legacy_pdf_atomic).",
+    "4. Staging validation is required before any production consideration."
+  ],
+  "items": []
+}

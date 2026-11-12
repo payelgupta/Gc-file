@@ -1,0 +1,7 @@
+[2026-11-10T20:31:57.026Z] ================================================================================
+[2026-11-10T20:31:57.027Z] জ্ঞানচর্চা'লয় (Gyan Prakasha Path) — Hardened Legacy PDF Migrator
+[2026-11-10T20:31:57.027Z] ================================================================================
+[2026-11-10T20:31:57.027Z] Environment: STAGING
+[2026-11-10T20:31:57.027Z] Execution Mode: AUDIT ONLY (Read-Only Dry Run)
+[2026-11-10T20:31:57.027Z] Database Target: Offline / Staging Template
+[2026-11-10T20:31:57.027Z] No live credentials provided. Generating baseline migration manifest template...
